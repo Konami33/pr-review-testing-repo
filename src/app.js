@@ -4,6 +4,7 @@ import * as itemController from "./controllers/item-controller.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { sendJson } from "./lib/http-response.js";
 
+// parse the json body of the request
 async function parseJsonBody(req) {
   if (req.method === "GET" || req.method === "DELETE") return {};
   const contentType = req.headers["content-type"] ?? "";
@@ -18,6 +19,7 @@ async function parseJsonBody(req) {
   }
 }
 
+// match the route of the request
 function matchRoute(url) {
   const pathname = new URL(url, "http://localhost").pathname;
   if (pathname === "/health") return { type: "health" };
@@ -33,6 +35,7 @@ function runHandler(handler, req, res) {
   );
 }
 
+// create the app
 export function createApp() {
   return createServer(async (req, res) => {
     const route = matchRoute(req.url ?? "/");
