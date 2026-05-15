@@ -3,6 +3,7 @@ import { json } from "node:stream/consumers";
 import * as itemController from "./controllers/item-controller.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { sendJson } from "./lib/http-response.js";
+import { listItems } from "./store/item-store.js";
 
 // parse the json body of the request
 async function parseJsonBody(req) {
@@ -60,7 +61,7 @@ export function createApp() {
     req.params = route.id ? { id: route.id } : {};
     const method = req.method ?? "GET";
 
-    if (method === "GET" && !route.id) return runHandler(itemController.listItems, req, res);
+    if (method === "GET" && !route.id) return sendJson(res, 200, { data: listItems() });
     if (method === "GET" && route.id) return runHandler(itemController.getItem, req, res);
     if (method === "POST" && !route.id) return runHandler(itemController.createItem, req, res);
     if (method === "PUT" && route.id) return runHandler(itemController.updateItem, req, res);
