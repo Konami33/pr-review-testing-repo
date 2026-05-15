@@ -4,6 +4,7 @@ export function listItems() {
   return itemStore.listItems();
 }
 
+// get the item by id
 export function getItem(id) {
   const item = itemStore.getItemById(id);
   if (!item) {
@@ -14,6 +15,7 @@ export function getItem(id) {
   return item;
 }
 
+// create the item
 export function createItem(payload) {
   validateItemPayload(payload, { requireName: true });
   return itemStore.createItem({
@@ -22,6 +24,7 @@ export function createItem(payload) {
   });
 }
 
+// update the item
 export function updateItem(id, payload) {
   validateItemPayload(payload, { requireName: false });
   const patch = {};
@@ -39,6 +42,7 @@ export function updateItem(id, payload) {
   return updated;
 }
 
+// delete the item
 export function deleteItem(id) {
   const removed = itemStore.deleteItem(id);
   if (!removed) {
@@ -48,6 +52,7 @@ export function deleteItem(id) {
   }
 }
 
+// validate the item payload
 function validateItemPayload(payload, { requireName }) {
   if (requireName && (!payload.name || typeof payload.name !== "string")) {
     const err = new Error("name is required and must be a non-empty string");
