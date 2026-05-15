@@ -3,7 +3,7 @@ import { json } from "node:stream/consumers";
 import * as itemController from "./controllers/item-controller.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { sendJson } from "./lib/http-response.js";
-import { listItems } from "./store/item-store.js";
+import { getItemById, listItems } from "./store/item-store.js";
 
 // parse the json body of the request
 async function parseJsonBody(req) {
@@ -62,7 +62,16 @@ export function createApp() {
     const method = req.method ?? "GET";
 
     if (method === "GET" && !route.id) return sendJson(res, 200, { data: listItems() });
-    if (method === "GET" && route.id) return runHandler(itemController.getItem, req, res);
+    if (method === "GET" && route.id) {
+      const item = getItemById(route.id);
+      if (!item) {
+        sendJson(res, 404, {
+          error: { code: "NOT_FOUND", message: `Item not found: ${route.id}` },
+        });
+        return;
+      }
+      return sendJson(res, 200, { data: item });
+    }
     if (method === "POST" && !route.id) return runHandler(itemController.createItem, req, res);
     if (method === "PUT" && route.id) return runHandler(itemController.updateItem, req, res);
     if (method === "DELETE" && route.id) return runHandler(itemController.deleteItem, req, res);
