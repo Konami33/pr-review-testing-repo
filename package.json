@@ -1,0 +1,16 @@
+{
+  "name": "pr-review-testing-repo",
+  "version": "1.0.0",
+  "description": "Node.js CRUD sample app with repository context for PR review agent testing",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test test/*.test.js",
+    "context:local": "node src/context/load-local-context.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
